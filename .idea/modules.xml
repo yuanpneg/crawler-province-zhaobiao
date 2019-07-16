@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/crawler-province-zhaobiao.iml" filepath="$PROJECT_DIR$/.idea/modules/crawler-province-zhaobiao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/crawler-province-zhaobiao_main.iml" filepath="$PROJECT_DIR$/.idea/modules/crawler-province-zhaobiao_main.iml" group="crawler-province-zhaobiao" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/crawler-province-zhaobiao_test.iml" filepath="$PROJECT_DIR$/.idea/modules/crawler-province-zhaobiao_test.iml" group="crawler-province-zhaobiao" />
+    </modules>
+  </component>
+</project>

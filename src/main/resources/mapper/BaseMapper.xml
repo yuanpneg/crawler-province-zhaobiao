@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.BaseMapper">
+    <!--插入tender表数据-->
+    <insert id="insertTender" parameterType="bean.Tender" useGeneratedKeys="true"  keyProperty="id" >
+              INSERT INTO tp_tender (title,addtime,edittime,sort,authstatus, `from`,fromurl,longitude,latitude,address,cattitle,catid,dsjurl,fileinfo,regionid,regiontitle,dsjaddtime)
+              VALUES (#{title},#{addtime},#{edittime},#{sort},0,#{from},#{fromurl},#{longitude},#{latitude},#{address},#{yeWuType},#{catid},#{realFrom},#{fileinfo},#{regionid},#{regiontitle},#{dsjaddtime})
+    </insert>
+    <!--插入招标正文sql-->
+    <insert id="insertTenderContent" parameterType="bean.Tender">
+        INSERT  INTO tp_tender_content(tenderid,content) VALUES  (#{id}, #{content})
+    </insert>
+
+    <select id="selectCity" resultType="java.lang.String">
+      SELECT distinct`address` FROM `tp_tender` where ishandled = 0 and longitude is null and latitude is null
+    </select>
+
+    <!--通过 title 查询经纬度-->
+    <select id="selectLonLatByTitle" resultMap="regionMap" parameterType="string">
+        SELECT * from tp_region where title like '${_parameter}%' and type > 1 limit 1
+    </select>
+
+    <select id="selectRegionBytitle" resultType="pojo1.Cityregion" parameterType="string">
+        SELECT * from tp_region where title like '%${_parameter}%' and  type > 1 limit 1
+    </select>
+
+    <!--修改经纬度-->
+    <update id="updateTenderRegionLngLat" parameterType="pojo1.Cityregion">
+        UPDATE tp_tender SET `longitude` = #{lon},`latitude` = #{lat},regionid = #{id},regiontitle = #{title}, ishandled = 1 where address = #{address}
+    </update>
+
+
+    <delete id="deleteIshandled">
+        DELETE from `tp_tender` where ishandled = 0;
+    </delete>
+
+
+    <select id="selectRegionTitleFromTender" resultType="java.lang.String">
+        SELECT  DISTINCT regiontitle FROM `tp_tender`  ;
+    </select>
+
+
+    <select id="selectRegionById" parameterType="int" resultMap="regionMap">
+        SELECT * from tp_region where id = #{asd}
+    </select>
+
+    <update id="updateRegionInTender" parameterType="pojo1.UpdaterReg">
+        UPDATE `tp_tender` SET `regionid` = #{regionid} ,`regiontitle` = #{newcity},longitude = #{lng},latitude=#{lat} ,ishandled = 1 where `regiontitle` = #{oldcity}
+    </update>
+
+
+    <delete id="deleteHistory" parameterType="int">
+        <![CDATA[
+            DELETE from tp_tender where addtime < #{asd}
+        ]]>
+    </delete>
+
+    <resultMap id="regionMap" type="pojo1.Cityregion">
+        <id column="id" property="id"/>
+        <result column="parentid" property="parentid"/>
+        <result column="parentpath" property="parentpath"/>
+        <result column="title" property="title"/>
+        <result column="type" property="type"/>
+        <result column="letter" property="letter"/>
+        <result column="longitude" property="lon"/>
+        <result column="latitude" property="lat"/>
+    </resultMap>
+
+    <!--判断全国公共资源url是否存在-->
+    <select id="selecttitle" parameterType="string" resultType="java.lang.Integer">
+       SELECT count(*) FROM `tp_tender` where `dsjurl`= #{fromurl} ;
+    </select>
+
+    <!--判断省资源网站url是否存在-->
+    <select id="selectUrl" parameterType="string" resultType="java.lang.Integer">
+        SELECT  COUNT(*) FROM `tp_tender` where `fromurl`= #{fromurl} ;
+    </select>
+
+    <!--判断公共资源title是否存在-->
+    <select id="selectTitle" parameterType="string" resultType="java.lang.Integer">
+        SELECT count(*) FROM `tp_tender` where `title` like #{title} ;
+    </select>
+    <!--查询徐州的数据是否重复-->
+    <select id="selectTitleAndTime"  resultType="java.lang.Integer">
+        SELECT count(*) FROM `tp_tender` where `title` like #{title,jdbcType=VARCHAR} and `addtime` like #{addtime,jdbcType=INTEGER};
+    </select>
+    <!--修改测试服的formalId-->
+    <update id="updateFormalId" parameterType="bean.Tender" >
+        UPDATE `tp_tender` SET `formalId` = #{formalId} WHERE id = #{id};
+    </update>
+
+    <!--删除重复数据-->
+    <delete id="deleteRepeat" >
+
+        DELETE from tp_tender where id in (
+        select id from(
+        select id  from tp_tender
+        where title  in (select  title  from tp_tender  group  by  title,address   having  count(*) > 1)
+        and id not in (select max(id) from  tp_tender  group by title,address  having count(* )>1)  ) a)
+
+--     delete  from tp_tender where id in (
+--     select id from (select max(id) as id from tp_tender  group by  concat(title,address) HAVING count(*) >1  ) a) ;
+
+    </delete>
+
+</mapper>

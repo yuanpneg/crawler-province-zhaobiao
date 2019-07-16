@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <!--
+    <property name="url" value="jdbc:mysql://120.55.52.30:3306/lezhu_new?characterEncoding=utf-8&amp;autoReconnect=true"/>
+    <property name="username" value="bigdata"/>
+    <property name="password" value="bigdata"/>
+    -->
+
+
+    <environments default="development">
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <dataSource type="POOLED">
+                <!--<property name="driver" value="com.mysql.jdbc.Driver"/>-->
+                <!--<property name="url" value="jdbc:mysql://120.55.52.30:3306/lezhu_new?characterEncoding=utf-8&amp;autoReconnect=true"/>-->
+                <!--<property name="username" value="bigdata"/>-->
+                <!--<property name="password" value="bigdata"/>-->
+                <!--<property name="driver" value="com.mysql.jdbc.Driver"/>-->
+                <!--<property name="url" value="jdbc:mysql://114.55.128.139:3306/lezhu_test?characterEncoding=utf-8&amp;autoReconnect=true"/>-->
+                <!--<property name="username" value="lezhu_test"/>-->
+                <!--<property name="password" value="cjL82z7j8nw"/>-->
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+
+                <!--<property name="driver" value="com.mysql.jdbc.Driver"/>-->
+                <!--<property name="url" value="jdbc:mysql://localhost:3306/vipyuan?characterEncoding=utf-8&amp;autoReconnect=true"/>-->
+                <!--<property name="username" value="root"/>-->
+                <!--<property name="password" value="123"/>-->
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <mapper resource="mapper/BaseMapper.xml"/>
+    </mappers>
+
+</configuration>
